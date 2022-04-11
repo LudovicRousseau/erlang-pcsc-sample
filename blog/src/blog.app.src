@@ -5,7 +5,8 @@
   {mod, {blog_app, []}},
   {applications,
    [kernel,
-    stdlib
+    stdlib,
+	pcsc
    ]},
   {env,[]},
   {modules, []},
