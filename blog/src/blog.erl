@@ -14,11 +14,23 @@ main() ->
 
 	% select applet
 	Aid = << 160, 0, 0, 0, 98, 3, 1, 12, 6, 1 >>,
-	Apdu = { apdu_cmd, default, iso, select, 4, 0, Aid, none},
-	{ok, Replies} = pcsc_card:command(Card, Apdu),
-	io:write(Replies).
+	Select_apdu = { apdu_cmd, default, iso, select, 4, 0, Aid, none },
+	{ok, Select_replies} = pcsc_card:command(Card, Select_apdu),
+	io:write(Select_replies),
+	io:fwrite("~n"),
 
 	% command
-	%{ok, Replies2} = pcsc_card:command(Card,
-	%	{cla = iso, ins = 0, p1 = 0, p2}),
-	%io:fwrite(Replies2).
+	Command_apdu = { apdu_cmd, default, iso, 0, 0, 0, none, none },
+	{ok, Command_replies} = pcsc_card:command(Card, Command_apdu),
+	io:write(Command_replies),
+	io:fwrite("~n"),
+
+	% extract the answer
+	[Reply | _] = Command_replies,
+	case Reply of
+		{apdu_reply, _, ok, Msg} ->
+			io:write(binary_to_atom(Msg)),
+			io:fwrite("~n");
+		{apdu_reply, _, error, _} ->
+			io:fwrite("Error~n")
+	end.
