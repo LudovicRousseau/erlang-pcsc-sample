@@ -13,10 +13,10 @@ main() ->
 	{ok, Card} = pcsc_card:start_link(Reader, shared, [t1, t0]),
 
 	% select applet
-	Aid = << 160, 0, 0, 0, 98, 99, 1, 12, 6, 0 >>,
-	{ok, Replies} = pcsc_card:command(Card,
-       #apdu_cmd{cla = iso, ins = select, p1 = 0, p2 = 10, data = Aid}),
-	io:fwrite(Replies).
+	Aid = << 160, 0, 0, 0, 98, 3, 1, 12, 6, 1 >>,
+	Apdu = { apdu_cmd, default, iso, select, 4, 0, Aid, none},
+	{ok, Replies} = pcsc_card:command(Card, Apdu),
+	io:write(Replies).
 
 	% command
 	%{ok, Replies2} = pcsc_card:command(Card,
