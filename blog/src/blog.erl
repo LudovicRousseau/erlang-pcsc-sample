@@ -15,7 +15,7 @@ main() ->
 	% select applet
 	Aid = << 160, 0, 0, 0, 98, 99, 1, 12, 6, 0 >>,
 	{ok, Replies} = pcsc_card:command(Card,
-	  {cla = iso, ins = select, p1 = 0, p2 = 10, data = Aid}),
+       #apdu_cmd{cla = iso, ins = select, p1 = 0, p2 = 10, data = Aid}),
 	io:fwrite(Replies).
 
 	% command
