@@ -1,6 +1,8 @@
 -module(blog).
 -export([main/0]).
 
+-include("iso7816.hrl").
+
 main() ->
 	% get all the available readers
 	{ok, Readers} = pcsc_card_db:list_readers(),
@@ -14,13 +16,13 @@ main() ->
 
 	% select applet
 	Aid = << 160, 0, 0, 0, 98, 3, 1, 12, 6, 1 >>,
-	Select_apdu = { apdu_cmd, default, iso, select, 4, 0, Aid, none },
+	Select_apdu = #apdu_cmd{cla = iso, ins = select, p1 = 4, p2 = 0, data = Aid},
 	{ok, Select_replies} = pcsc_card:command(Card, Select_apdu),
 	io:write(Select_replies),
 	io:fwrite("~n"),
 
 	% command
-	Command_apdu = { apdu_cmd, default, iso, 0, 0, 0, none, none },
+	Command_apdu = #apdu_cmd{ cla = iso, ins = 0, p1 = 0, p2 = 0 },
 	{ok, Command_replies} = pcsc_card:command(Card, Command_apdu),
 	io:write(Command_replies),
 	io:fwrite("~n"),
